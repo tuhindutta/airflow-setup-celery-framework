@@ -6,11 +6,8 @@ USER root
 COPY requirements.txt /requirements.txt
 COPY custom_requirements.txt /custom_requirements.txt
 
-
-# ARG NEXUS_URL=https://c3054db9fb32.ngrok-free.app/repository/pypi-internal/simple
 ARG INDEX_URL=https://pypi.org/simple
 ENV PYPI_URL=${INDEX_URL}
-# ARG NEXUS_PORT=8081
 ARG PRIVATE_PKG=sleep_disorder
 ARG PRIVATE_VER=0.1.0
     
