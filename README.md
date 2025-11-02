@@ -48,55 +48,10 @@ Airflow Stack (Docker Compose)
 ├─ docker-compose.yaml        # Defines complete Airflow + Redis + Postgres + Celery stack
 ├─ Dockerfile                 # Extends official Airflow image, installs dependencies from Nexus
 ├─ .env                       # Defines Airflow UID and base image
-├─ requirements.txt            # Public Python dependencies
-├─ custom_requirements.txt     # Private dependencies (via Nexus)
-├─ jenkins/Jenkinsfile         # Jenkins CI/CD pipeline definition
-├─ dags/                       # DAGs directory
-├─ plugins/                    # Custom plugins
-├─ config/                     # Airflow config mounts
-└─ scripts/                    # Optional init and helper scripts
+├─ Jenkinsfile         # Jenkins CI/CD pipeline definition
 ```
 
 ---
-
-## Component Details
-
-### `.env`
-
-Defines base image and Airflow UID for consistent file ownership.
-
-```bash
-AIRFLOW_IMAGE_NAME=apache/airflow:3.1.0
-AIRFLOW_UID=50000
-```
-
----
-
-### `Dockerfile`
-
-Extends the official Airflow image and installs both public and private Python dependencies.
-
-```dockerfile
-FROM apache/airflow:3.1.0
-
-USER root
-COPY requirements.txt /requirements.txt
-COPY custom_requirements.txt /custom_requirements.txt
-
-ARG INDEX_URL=https://pypi.org/simple
-ENV PYPI_URL=${INDEX_URL}
-
-RUN --mount=type=secret,id=nexus_user \
-    --mount=type=secret,id=nexus_pass \
-    set -e; \
-    U="$(cat /run/secrets/nexus_user)"; \
-    P="$(cat /run/secrets/nexus_pass)";
-
-USER airflow
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r /requirements.txt && \
-    pip install --no-cache-dir --no-deps --index-url "${PYPI_URL}" -r /custom_requirements.txt
-```
 
 **Key Points:**
 
@@ -177,26 +132,16 @@ Declarative Jenkins pipeline that automates setup, build, and deployment.
 2. **Prepare:** Creates `DEV_DIR`, injects credentials, downloads requirement files.
 3. **Build up services:** Builds Docker image and runs `docker compose up -d`, cleans secrets.
 
-**Snippet:**
-
-```groovy
-withCredentials([usernamePassword(credentialsId: params.NEXUS_CREDS_ID, usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-  sh 'docker compose up -d'
-}
-```
-
-**Cleanup:** Sensitive files like credentials, Dockerfile, and compose YAML are deleted post-deployment.
 
 ---
 
 ## CI/CD Flow Summary
 
-| Stage    | Description                      | Key Output                          |
-| -------- | -------------------------------- | ----------------------------------- |
-| Checkout | Clean workspace and fetch repo   | SCM contents                        |
-| Prepare  | Fetch dependencies, inject creds | Staged directory with Docker assets |
-| Build    | Build custom Airflow image       | Image with private deps installed   |
-| Deploy   | Run `docker compose up -d`       | Running Airflow Celery cluster      |
+| Stage                | Description                               | Key Output                                       |
+| -------------------- | ----------------------------------------- | ------------------------------------------------ |
+| Checkout             | Clean workspace and fetch repo            | SCM contents                                     |
+| Prepare              | Fetch dependencies, inject creds          | Staged directory with Docker assets              |
+| Build up services    | Build & deploy custom Airflow image       | Image with private deps installed and deployed   |
 
 ---
 
@@ -214,36 +159,6 @@ withCredentials([usernamePassword(credentialsId: params.NEXUS_CREDS_ID, username
 
 ---
 
-## Best Practices
-
-* Generate and set a `FERNET_KEY` for production security.
-* Avoid deleting `docker-compose.yaml` post-deployment for lifecycle management.
-* Keep Airflow image version pinned to a known-stable tag.
-* Validate Nexus credentials via Jenkins before pipeline execution.
-* Use Jenkins credentials store instead of passing plain text.
-
----
-
-## Quickstart
-
-```bash
-# 1. Set environment variables or use Jenkins params
-export NEXUS_URL=https://<nexus-repo>/simple
-export DEV_DIR=/tmp/airflow_celery_setup
-
-# 2. Build and run locally (manual)
-docker build --secret id=nexus_user,src=./nexus_user \
-             --secret id=nexus_pass,src=./nexus_pass \
-             -t custom-airflow:latest .
-
-docker compose up -d
-
-# 3. Access Airflow UI
-http://localhost:8082  (username: airflow, password: airflow)
-```
-
----
-
 ## Future Enhancements
 
 * Parameterize Airflow version and executor via Jenkins.
@@ -253,12 +168,6 @@ http://localhost:8082  (username: airflow, password: airflow)
 
 ---
 
-## License
-
-Apache License 2.0 — See LICENSE file for details.
-
----
 
 **Maintainer:** [@tuhindutta](https://github.com/tuhindutta)
-
-For documentation site setup: this README can be used directly as the landing page for GitHub Pages or extended with MkDocs Material for versioned documentation.
+[**GitHub repo:**](https://github.com/tuhindutta/airflow-setup-celery-framework)
