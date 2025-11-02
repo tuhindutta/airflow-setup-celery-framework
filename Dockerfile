@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.6
 FROM apache/airflow:3.1.0
 
 USER root
