@@ -1,4 +1,4 @@
-# Airflow Celery Framework — Automated CI/CD Setup via Jenkins
+# [Airflow Celery Framework — Automated CI/CD Setup via Jenkins](https://github.com/tuhindutta/airflow-setup-celery-framework)
 
 ## Overview
 
@@ -165,9 +165,3 @@ Declarative Jenkins pipeline that automates setup, build, and deployment.
 * Support for remote Docker hosts (Swarm/Kubernetes).
 * Add Makefile for local dev lifecycle management.
 * Integration with GitHub Actions for lightweight CI.
-
----
-
-
-**Maintainer:** [@tuhindutta](https://github.com/tuhindutta)
-[**GitHub repo:**](https://github.com/tuhindutta/airflow-setup-celery-framework)
