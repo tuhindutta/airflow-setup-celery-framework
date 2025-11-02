@@ -6,10 +6,7 @@ COPY requirements.txt /requirements.txt
 COPY custom_requirements.txt /custom_requirements.txt
 
 ARG INDEX_URL=https://pypi.org/simple
-ENV PYPI_URL=${INDEX_URL}
-ARG PRIVATE_PKG=sleep_disorder
-ARG PRIVATE_VER=0.1.0
-    
+ENV PYPI_URL=${INDEX_URL}    
 
 RUN --mount=type=secret,id=nexus_user \
     --mount=type=secret,id=nexus_pass \
