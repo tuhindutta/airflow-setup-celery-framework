@@ -2,15 +2,15 @@ pipeline {
   agent any
   options { timestamps() }
 
-  parameters {
-    string(name: 'NEXUS_URL', description: 'Optional custom PyPI/simple index URL')
-    string(name: 'DEV_DIR',  description: 'Destination directory (absolute or relative)')
-    string(name: 'NEXUS_CREDS_ID', description: 'Jenkins credentialsId (username+password). Leave empty to use params below.')
-    string(name: 'NEXUS_USER', description: 'Only used if NEXUS_CREDS_ID is empty')
-    password(name: 'NEXUS_PASS', description: 'Only used if NEXUS_CREDS_ID is empty')   
-    string(name: 'REQUIREMENTS', description: 'requirements.txt') 
-    string(name: 'CUSTOM_REQUIREMENTS', description: 'custom_requirements.txt') 
-  }
+  // parameters {
+  //   string(name: 'NEXUS_URL', description: 'Optional custom PyPI/simple index URL')
+  //   string(name: 'DEV_DIR',  description: 'Destination directory (absolute or relative)')
+  //   string(name: 'NEXUS_CREDS_ID', description: 'Jenkins credentialsId (username+password). Leave empty to use params below.')
+  //   string(name: 'NEXUS_USER', description: 'Only used if NEXUS_CREDS_ID is empty')
+  //   password(name: 'NEXUS_PASS', description: 'Only used if NEXUS_CREDS_ID is empty')   
+  //   string(name: 'REQUIREMENTS', description: 'requirements.txt') 
+  //   string(name: 'CUSTOM_REQUIREMENTS', description: 'custom_requirements.txt') 
+  // }
 
   environment {
     NEXUS_URL    = "${params.NEXUS_URL}"
