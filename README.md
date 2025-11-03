@@ -48,7 +48,7 @@ Airflow Stack (Docker Compose)
 ├─ docker-compose.yaml        # Defines complete Airflow + Redis + Postgres + Celery stack
 ├─ Dockerfile                 # Extends official Airflow image, installs dependencies from Nexus
 ├─ .env                       # Defines Airflow UID and base image
-├─ Jenkinsfile         # Jenkins CI/CD pipeline definition
+├─ Jenkinsfile                # Jenkins CI/CD pipeline definition
 ```
 
 ---
