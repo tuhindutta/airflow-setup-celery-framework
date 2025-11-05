@@ -115,7 +115,7 @@ pipeline {
                 cd "${env.DEV_DIR}"
                 echo "" > README.md
                 ${cmd}
-                rm -rf nexus_user nexus_pass .env README.md Dockerfile Jenkinsfile \
+                rm -rf nexus_user nexus_pass .env Dockerfile Jenkinsfile \
                 docker-compose.yaml requirements.txt custom_requirements.txt
                 """
             } else {
@@ -123,7 +123,7 @@ pipeline {
                 cd /d "${env.DEV_DIR}"
                 type "" > README.md
                 ${cmd}
-                del /F /Q "nexus_user" "nexus_pass" ".env" "README.md" "Dockerfile" "Jenkinsfile" ^
+                del /F /Q "nexus_user" "nexus_pass" ".env" "Dockerfile" "Jenkinsfile" ^
                 "docker-compose.yaml" "requirements.txt" "custom_requirements.txt" 2>nul
                 """
             }
